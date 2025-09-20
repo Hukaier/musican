@@ -37,6 +37,7 @@ const ScaleAdventure: React.FC = () => {
   const [score, setScore] = useState({ correct: 0, total: 0 });
   const playingRef = useRef<boolean>(false);
   const [wrongIdx, setWrongIdx] = useState<number | null>(null);
+  const [message, setMessage] = useState<string>('');
 
   const nodes = scale.degrees;
   const bridges = scale.steps; // length 7
@@ -89,16 +90,26 @@ const ScaleAdventure: React.FC = () => {
     setScore({ correct: 0, total: 0 });
     setCurrentIdx(0);
     setTargetIdx(1);
+    setMessage('请点击下一音级：2');
     await playNote(0);
   }, [playNote]);
 
-  const startEarTraining = useCallback(async () => {
-    setQuizMode('ear-training');
-    setScore({ correct: 0, total: 0 });
+  const nextEarTrainingQuestion = useCallback(async () => {
     const idx = Math.floor(Math.random() * nodes.length);
     setTargetIdx(idx);
     await playNote(idx);
   }, [nodes.length, playNote]);
+
+  const startEarTraining = useCallback(async () => {
+    if (quizMode === 'ear-training') {
+      // 正在练习中：不要重置分数，只进入下一题
+      await nextEarTrainingQuestion();
+      return;
+    }
+    setQuizMode('ear-training');
+    setScore({ correct: 0, total: 0 });
+    await nextEarTrainingQuestion();
+  }, [quizMode, nextEarTrainingQuestion]);
 
   const replayTarget = useCallback(async () => {
     if (quizMode !== 'ear-training' || targetIdx == null) return;
@@ -123,9 +134,14 @@ const ScaleAdventure: React.FC = () => {
       // 进入下一题
       setTimeout(() => {
         setWrongIdx(null);
-        const next = Math.floor(Math.random() * nodes.length);
-        setTargetIdx(next);
-        playNote(next);
+        if (quizMode === 'ear-training') {
+          const next = Math.floor(Math.random() * nodes.length);
+          setTargetIdx(next);
+          playNote(next);
+        } else if (quizMode === 'next-degree') {
+          // 保持目标不变，继续提示
+          setMessage(`请点击下一音级：${(targetIdx + 1)}`);
+        }
       }, 1000);
       return;
     }
@@ -135,6 +151,19 @@ const ScaleAdventure: React.FC = () => {
       // 目标是当前 index 的下一度
       const nextTarget = Math.min((idx + 1), nodes.length - 1);
       setTargetIdx(nextTarget);
+      if (idx >= nodes.length - 1) {
+        // 到达8度，重置一轮
+        setTimeout(async () => {
+          setCurrentIdx(0);
+          setTargetIdx(1);
+          setMessage('完成一轮！从 1 开始，点击下一音级：2');
+          await playNote(0);
+        }, 300);
+      } else {
+        setMessage(`请点击下一音级：${(nextTarget + 1)}`);
+        // 播放新的“当前音级”（用户刚点击正确的音）作为上下文
+        setTimeout(() => { playNote(idx); }, 200);
+      }
     } else if (quizMode === 'ear-training') {
       // 重新抽题
       const next = Math.floor(Math.random() * nodes.length);
@@ -164,11 +193,18 @@ const ScaleAdventure: React.FC = () => {
           <Button variant="secondary" onClick={playAscending}>上行</Button>
           <Button variant="secondary" onClick={playDescending}>下行</Button>
           <Button variant={quizMode === 'next-degree' ? 'primary' : 'secondary'} onClick={startNextDegreeQuiz}>下一音级练习</Button>
-          <Button variant={quizMode === 'ear-training' ? 'primary' : 'secondary'} onClick={startEarTraining}>听辨练习</Button>
-          {quizMode === 'ear-training' && (
-            <Button variant="secondary" onClick={replayTarget}>重放</Button>
+          {quizMode !== 'ear-training' ? (
+            <Button variant={quizMode === 'ear-training' ? 'primary' : 'secondary'} onClick={startEarTraining}>听辨练习</Button>
+          ) : (
+            <>
+              <Button variant="primary" onClick={startEarTraining}>下一题</Button>
+              <Button variant="secondary" onClick={replayTarget}>重放</Button>
+              <Button variant="secondary" onClick={() => setQuizMode('off')}>结束练习</Button>
+            </>
           )}
-          <Button variant="secondary" onClick={() => setQuizMode('off')}>自由模式</Button>
+          {quizMode !== 'ear-training' && (
+            <Button variant="secondary" onClick={() => setQuizMode('off')}>自由模式</Button>
+          )}
         </div>
       </div>
 
@@ -179,6 +215,11 @@ const ScaleAdventure: React.FC = () => {
             <div className="text-sm text-gray-600">C 大调全半音公式：W – W – H – W – W – W – H</div>
             {Legend}
           </div>
+          {quizMode !== 'off' && (
+            <div className="mb-3 text-center text-base md:text-lg font-semibold text-blue-700/90">
+              {message}
+            </div>
+          )}
           {/* 横向阶梯图 */}
           <div className="relative">
             <div className="flex items-center justify-center">
@@ -224,6 +265,19 @@ const ScaleAdventure: React.FC = () => {
             <div>• 绿色桥=全音 (W)，红色桥=半音 (H)</div>
             <div>• 下一音级练习：从当前音级依次上行</div>
             <div>• 听辨练习：听音后点对应音级</div>
+          </Card>
+          <Card className="p-4 text-sm text-gray-700 space-y-2">
+            <div className="font-semibold text-gray-900">🎯 小技巧（新手友好）</div>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>听主音+跟唱：先听主音 Do → 目标音 → 再回 Do，轻哼后再作答。</li>
+              <li>先练地标音：先只练 1/3/5（和弦内音），熟练后再加 2/6，最后补 7 和 4。</li>
+              <li>方向判断：先分辨“更靠上还是更靠下”，别急于判断准确音名。</li>
+              <li>对比学习：错题立即重放“正确音”，与自己刚点的音对比高低与距离。</li>
+              <li>小口令：3（Mi）明亮稳定；5（Sol）开阔往上；7（Ti）最不稳定想回 1；4（Fa）略“卡住”。</li>
+              <li>训练节奏：
+                <span className="block pl-1">第1周练 1/3/5（≥80% 再加难）→ 第2周加 2/6 → 第3周加 7 与 4。</span>
+              </li>
+            </ul>
           </Card>
         </div>
       </div>

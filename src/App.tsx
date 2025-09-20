@@ -6,6 +6,7 @@ import ModuleSelector from './components/ModuleSelector';
 import NoteGame from './components/games/NoteGame';
 import RhythmMaster from './components/games/RhythmMaster';
 import ScaleAdventure from './components/games/ScaleAdventure';
+import ChordMagic from './components/games/ChordMagic';
 import CompositionWorkshop from './components/composition/CompositionWorkshop';
 import Button from './components/ui/Button';
 
@@ -37,13 +38,7 @@ const AppInner: React.FC = () => {
       case 'scale':
         return <ScaleAdventure />;
       case 'chord':
-        return (
-          <div className="text-center py-20">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">🔀 和弦魔法</h2>
-            <p className="text-gray-600 mb-8">即将推出...</p>
-            <Button onClick={handleBackToHome}>返回主页</Button>
-          </div>
-        );
+        return <ChordMagic />;
       case 'key':
         return (
           <div className="text-center py-20">
