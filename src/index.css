@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 极简基础样式，避免未定义的 Tailwind token 报错 */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  margin: 0;
+}
