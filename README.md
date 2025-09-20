@@ -1049,6 +1049,61 @@ E♭         |       A
 
 ---
 
-*最后更新：2024年*  
-*版本：v1.0*  
+## 📄 版权信息
+
+### 开源许可证
+本项目基于 **MIT License** 开源协议发布，允许自由使用、修改和分发。
+
+### 版权声明
+```
+Copyright (c) 2025 音乐在线学习平台 (Music Theory Playground)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+### 第三方依赖
+本项目使用了以下开源库，感谢这些优秀的项目：
+
+- **React** - MIT License
+- **Tone.js** - MIT License  
+- **Tailwind CSS** - MIT License
+- **Framer Motion** - MIT License
+- **Zustand** - MIT License
+- **React Router** - MIT License
+- **TypeScript** - Apache License 2.0
+- **Vite** - MIT License
+
+### 贡献指南
+欢迎贡献代码！请遵循以下原则：
+- 保持代码风格一致
+- 添加适当的测试
+- 更新相关文档
+- 遵循开源协议
+
+### 联系方式
+- 项目仓库：[GitHub](https://github.com/your-username/music-theory-playground)
+- 问题反馈：通过 GitHub Issues 提交
+- 功能建议：通过 GitHub Discussions 讨论
+
+---
+
+*最后更新：2025年*  
+*版本：v0.1.0*  
+*许可证：MIT License*  
 *适用对象：音乐理论初学者* 🎵

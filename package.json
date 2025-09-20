@@ -3,6 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "一个交互式音乐理论学习平台，包含节拍训练、音阶探险、和弦魔法等模块",
+  "author": "音乐在线学习平台开发团队",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/music-theory-playground.git"
+  },
+  "keywords": [
+    "music",
+    "theory",
+    "education",
+    "interactive",
+    "rhythm",
+    "scales",
+    "chords",
+    "ear-training",
+    "音乐理论",
+    "音乐教育"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
