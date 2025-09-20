@@ -165,7 +165,6 @@ npm run build
 如有任何疑问，可以通过以下方式联系：
 - 创建 GitHub Issue
 - 在 GitHub Discussions 中讨论
-- 发送邮件至：[your-email@example.com]
 
 ## 📋 行为准则
 
